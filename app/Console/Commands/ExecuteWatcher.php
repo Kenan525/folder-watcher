@@ -41,7 +41,7 @@ class ExecuteWatcher extends Command
      */
     public function handle(): void
     {
-        Watch::path(__DIR__ . '/FolderDirectory')->onFileCreated(
+        Watch::path('E:\\EMAIL')->onFileCreated(
             function (string $path) {
                 $this->handleEmail($path);
             })->start();
