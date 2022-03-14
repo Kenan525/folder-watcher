@@ -41,6 +41,7 @@ class ExecuteWatcher extends Command
     {
         Watch::path('E:\\EMAIL')->onFileCreated(
             function (string $path) {
+                sleep(10);
                 $this->handleEmail($path);
             })->start();
     }
