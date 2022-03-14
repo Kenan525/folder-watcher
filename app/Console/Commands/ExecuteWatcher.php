@@ -2,9 +2,7 @@
 namespace App\Console\Commands;
 
 use App\Mail\Watcher;
-use Exception;
 use Illuminate\Console\Command;
-use phpDocumentor\Reflection\Types\Void_;
 use Spatie\Watcher\Exceptions\CouldNotStartWatcher;
 use Spatie\Watcher\Watch;
 use Illuminate\Support\Facades\Mail;
@@ -53,36 +51,26 @@ class ExecuteWatcher extends Command
      */
     public function handleEmail(string $path): void
     {
-        $receiver = '';
-        $body = '';
-        $attachments = [];
-        $openedFile = fopen($path, 'rb');
-        while ($line = fgets($openedFile)) {
-            $fileLines[] = $line;
+        if (pathinfo($path, PATHINFO_EXTENSION) !== 'xml') {
+            return;
         }
-
-        foreach ($fileLines as $fileLine) {
-            if (str_starts_with(trim($fileLine), '<email>')) {
-                $receiver = str_replace(['<email>', '</email>'], '', trim($fileLine));
-            }
-            if (str_starts_with(trim($fileLine), '<body>')) {
-                $body = str_replace(['<body>', '</body>'], '', trim($fileLine));
-            }
-
-            if ($receiver && $body) {
-                $this->sendEmail($receiver, $body);
-            }
-        }
+        $file = file_get_contents($path);
+        $xml = simplexml_load_string($file);
+        $data = [
+            'subject' => (string)$xml->subject ?: 'Staff24',
+            'receiver' => (string)$xml->to,
+            'body' => (string)$xml->body,
+            'attachment' => (string)$xml->attachment
+        ];
+        $this->sendEmail($data);
     }
 
     /**
-     * @param string $receiver
-     * @param string $body
+     * @param array $data
      * @return void
      */
-    protected function sendEmail(string $receiver, string $body): void
+    protected function sendEmail(array $data): void
     {
-        $data = [];
-        Mail::to('kenan_mahmic@hotmail.com')->send(new Watcher());
+        Mail::to($data['receiver'])->send(new Watcher($data));
     }
 }

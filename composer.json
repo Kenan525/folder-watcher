@@ -9,7 +9,8 @@
         "illuminate/mail": "^9.1",
         "laravel/lumen-framework": "^9.0",
         "laravel/tinker": "^2.7",
-        "spatie/file-system-watcher": "^1.0"
+        "spatie/file-system-watcher": "^1.0",
+      "ext-simplexml": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
