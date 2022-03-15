@@ -42,12 +42,12 @@ class ExecuteWatcher extends Command
         Watch::path('E:\\EMAIL')->onFileCreated(
             function (string $path) {
 				$extractedPath = preg_split('/\r\n|\r|\n/', $path);
-				if ($this->handleEmail($extractedPath[0])) {
-					print_r('Email was sent!');
-				} else {
-					print_r('Email was not sent!');
-				}
-               
+                try {
+                    $this->handleEmail($extractedPath[0]);
+                    print_r("Email was sent!");
+                } catch (\Exception $exception) {
+                    print_r($exception->getMessage());
+                }
             })->start();
     }
 
