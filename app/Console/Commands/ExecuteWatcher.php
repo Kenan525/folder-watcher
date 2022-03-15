@@ -45,8 +45,14 @@ class ExecuteWatcher extends Command
                 try {
                     $this->handleEmail($extractedPath[0]);
                     print_r("Email was sent!");
+                    echo '<br/>';
                 } catch (\Exception $exception) {
+                    print_r('Email was not sent!');
+                    echo '<br/>';
                     print_r($exception->getMessage());
+                    echo '<br/>';
+                } finally {
+                    $this->moveFile($extractedPath[0]);
                 }
             })->start();
     }
@@ -78,5 +84,19 @@ class ExecuteWatcher extends Command
     protected function sendEmail(array $data): void
     {
         Mail::to($data['receiver'])->send(new Watcher($data));
+    }
+
+    /**
+     * @param string $path
+     * @return void
+     */
+    protected function moveFile(string $path): void
+    {
+        $fileName = basename($path);
+        try {
+            rename($path, 'E:\\EMAIL_ARCHIV\\' . $fileName);
+        } catch (\Exception $exception) {
+            print_r("File could not be moved!");
+        }
     }
 }
