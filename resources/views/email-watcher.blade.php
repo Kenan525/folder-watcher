@@ -1,4 +1,4 @@
 {!! $data['body'] !!}
 <br/>
 <br/>
-{!! $data['signatur'] !!}
+{!! $data['signature'] !!}

@@ -74,7 +74,7 @@ class ExecuteWatcher extends Command
             'receiver' => (string)$xml->to,
             'body' => (string)$xml->body,
             'attachment' => (string)$xml->attachment,
-            'signatur' => (string)$xml->signatur
+            'signature' => (string)$xml->signatur
         ];
         $this->sendEmail($data);
     }
