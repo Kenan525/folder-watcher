@@ -1,1 +1,2 @@
 {!! $data['body'] !!}
+{!! $data['signatur'] !!}

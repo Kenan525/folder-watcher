@@ -70,9 +70,11 @@ class ExecuteWatcher extends Command
         $xml = simplexml_load_string($file);
         $data = [
             'subject' => (string)$xml->subject ?: 'Staff24',
+            'from' => (string)$xml->from ?: 'thomas.wiesinger@staff24.com',
             'receiver' => (string)$xml->to,
             'body' => (string)$xml->body,
-            'attachment' => (string)$xml->attachment
+            'attachment' => (string)$xml->attachment,
+            'signatur' => (string)$xml->signatur
         ];
         $this->sendEmail($data);
     }

@@ -37,9 +37,9 @@ class Watcher extends Mailable
     {
         $attachmentPath = 'E:\\ATTACHMENTS/' . $this->data['attachment'];
         if ($this->data['attachment']) {
-            return $this->view('email-watcher')->subject($this->data['subject'])->attach($attachmentPath);
+            return $this->from($this->data['from'])->view('email-watcher')->subject($this->data['subject'])->attach($attachmentPath);
         }
 
-        return $this->view('email-watcher')->subject($this->data['subject']);
+        return $this->from($this->data['from'])->view('email-watcher')->subject($this->data['subject']);
     }
 }
