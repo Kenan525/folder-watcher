@@ -102,10 +102,7 @@ class ExecuteWatcher extends Command
     {
         $fileName = basename($path);
         try {
-            /** @var UploadedFile $openedFile */
-            $openedFile = fopen($path, 'r+');
-            $openedFile->store('E:\\EMAIL_ARCHIV\\', $fileName);
-            //rename($path, 'E:\\EMAIL_ARCHIV\\' . $fileName);
+            rename($path, 'E:\\EMAIL_ARCHIV\\' . $fileName);
         } catch (\Exception $exception) {
             print_r("File could not be moved!");
         }
