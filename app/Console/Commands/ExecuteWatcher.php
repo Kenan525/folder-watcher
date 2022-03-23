@@ -3,6 +3,7 @@ namespace App\Console\Commands;
 
 use App\Mail\Watcher;
 use Illuminate\Console\Command;
+use Illuminate\Http\UploadedFile;
 use Spatie\Watcher\Exceptions\CouldNotStartWatcher;
 use Spatie\Watcher\Watch;
 use Illuminate\Support\Facades\Mail;
@@ -72,6 +73,7 @@ class ExecuteWatcher extends Command
             'subject' => (string)$xml->subject ?: 'Staff24',
             'from' => (string)$xml->from ?: 'thomas.wiesinger@staff24.com',
             'receiver' => (string)$xml->to,
+            'cc' => $xml->cc ? (string)$xml->cc : '',
             'body' => (string)$xml->body,
             'attachment' => (string)$xml->attachment,
             'signature' => (string)$xml->signatur
@@ -85,7 +87,11 @@ class ExecuteWatcher extends Command
      */
     protected function sendEmail(array $data): void
     {
-        Mail::to($data['receiver'])->send(new Watcher($data));
+        if ($data['cc']) {
+            Mail::to($data['receiver'])->cc($data['cc'])->send(new Watcher($data));
+        } else {
+            Mail::to($data['receiver'])->send(new Watcher($data));
+        }
     }
 
     /**
@@ -96,7 +102,10 @@ class ExecuteWatcher extends Command
     {
         $fileName = basename($path);
         try {
-            rename($path, 'E:\\EMAIL_ARCHIV\\' . $fileName);
+            /** @var UploadedFile $openedFile */
+            $openedFile = fopen($path, 'r+');
+            $openedFile->store('E:\\EMAIL_ARCHIV\\', $fileName);
+            //rename($path, 'E:\\EMAIL_ARCHIV\\' . $fileName);
         } catch (\Exception $exception) {
             print_r("File could not be moved!");
         }
