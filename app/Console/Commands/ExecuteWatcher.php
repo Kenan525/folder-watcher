@@ -69,13 +69,20 @@ class ExecuteWatcher extends Command
         }
         $file = file_get_contents($path);
         $xml = simplexml_load_string($file);
+        $attachments = [];
+        foreach ($xml->attachments as $xmlAttachments) {
+            foreach ($xmlAttachments as $attachment) {
+                $attachments[] = (string)$attachment;
+            }
+        }
+
         $data = [
             'subject' => (string)$xml->subject ?: 'Staff24',
             'from' => (string)$xml->from ?: 'thomas.wiesinger@staff24.com',
             'receiver' => (string)$xml->to,
             'cc' => $xml->cc ? (string)$xml->cc : '',
             'body' => (string)$xml->body,
-            'attachment' => (string)$xml->attachment,
+            'attachments' => $attachments,
             'signature' => (string)$xml->signatur
         ];
         $this->sendEmail($data);
