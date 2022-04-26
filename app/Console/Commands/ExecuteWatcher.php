@@ -72,7 +72,9 @@ class ExecuteWatcher extends Command
         $attachments = [];
         foreach ($xml->attachments as $xmlAttachments) {
             foreach ($xmlAttachments as $attachment) {
-                $attachments[] = (string)$attachment;
+                if ($attachment) {
+                    $attachments[] = (string)$attachment;
+                }
             }
         }
 
